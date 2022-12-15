@@ -3,6 +3,7 @@ package com.easychat.core.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Table(name="users")
@@ -18,6 +19,9 @@ public class User {
     private String email;
     @Column(length=50)
     private String password;
+
+    @OneToMany(mappedBy="user")
+    private Set<Message> messages;
 
     public User() {
     }
