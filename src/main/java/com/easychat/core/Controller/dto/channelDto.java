@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class channelDto {
+public class ChannelDto {
 
     private Integer id;
     private String name;
@@ -13,10 +13,10 @@ public class channelDto {
     private Timestamp created_at;
     private Timestamp updated_at;
 
-    public channelDto() {
+    public ChannelDto() {
     }
 
-    public channelDto(Integer id, String name, String description, Timestamp created_at, Timestamp updated_at) {
+    public ChannelDto(Integer id, String name, String description, Timestamp created_at, Timestamp updated_at) {
         this.id = id;
         this.name = name;
         this.description = description;
