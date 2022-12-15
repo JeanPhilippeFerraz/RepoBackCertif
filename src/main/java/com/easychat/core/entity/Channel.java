@@ -1,8 +1,11 @@
 package com.easychat.core.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -19,8 +22,13 @@ public class Channel {
     private String name;
     @Column(length=250)
     private String description;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
 
     @OneToMany(mappedBy="channel")
     private Set<Message> messages;
@@ -28,14 +36,19 @@ public class Channel {
     public Channel() {
     }
 
-    public Channel(String name, String description, Timestamp created_at, Timestamp updated_at) {
+    public Channel(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Channel(String name, String description, Date created_at, Date updated_at) {
         this.name = name;
         this.description = description;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
 
-    public Channel(Integer id, String name, String description, Timestamp created_at, Timestamp updated_at) {
+    public Channel(Integer id, String name, String description, Date created_at, Date updated_at) {
         this.id = id;
         this.name = name;
         this.description = description;
