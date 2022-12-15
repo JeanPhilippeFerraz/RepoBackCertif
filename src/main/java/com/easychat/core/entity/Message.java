@@ -1,8 +1,11 @@
 package com.easychat.core.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -21,13 +24,24 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updated_at;
 
     public Message() {
     }
 
-    public Message(String text, Channel channel, User user, Timestamp created_at, Timestamp updated_at) {
+    public Message(String text, Channel channel, User user) {
+        this.text = text;
+        this.channel = channel;
+        this.user = user;
+    }
+
+    public Message(String text, Channel channel, User user, Date created_at, Date updated_at) {
         this.text = text;
         this.channel = channel;
         this.user = user;
@@ -35,10 +49,10 @@ public class Message {
         this.updated_at = updated_at;
     }
 
-    public Message(Integer id, String text, Channel canal, User user, Timestamp created_at, Timestamp updated_at) {
+    public Message(Integer id, String text, Channel channel, User user, Date created_at, Date updated_at) {
         this.id = id;
         this.text = text;
-        this.channel = canal;
+        this.channel = channel;
         this.user = user;
         this.created_at = created_at;
         this.updated_at = updated_at;
