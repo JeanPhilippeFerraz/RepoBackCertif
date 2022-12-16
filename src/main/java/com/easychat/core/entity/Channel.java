@@ -30,11 +30,11 @@ public class Channel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
 
-    @OneToMany(mappedBy="channel")
+    @OneToMany(mappedBy="message")
     private Set<Message> messages;
 
-    @OneToMany(mappedBy="channel")
-    private Set<UserChannel> userChannels;
+    @ManyToMany(mappedBy="channels")
+    private Set<User> users;
 
     public Channel() {
     }
