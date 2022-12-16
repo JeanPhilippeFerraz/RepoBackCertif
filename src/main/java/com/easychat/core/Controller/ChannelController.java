@@ -37,12 +37,17 @@ public class ChannelController {
 
     @DeleteMapping
     public ResponseEntity<Channel> deleteChannel(@RequestBody Channel channel) {
-        try {
-            service.deleteChannel(channel);
-            return ResponseEntity.ok(channel);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        if (channel.getId()!=1){
+            try {
+                service.deleteChannel(channel);
+                return ResponseEntity.ok(channel);
+            } catch (Exception e) {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
         }
+
     }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {

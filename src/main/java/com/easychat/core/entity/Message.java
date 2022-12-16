@@ -15,13 +15,13 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @Column(length=500)
+    @Column(length=500, nullable = false)
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="channel_id", nullable=false)
+    @JoinColumn(name="channel_id", nullable = false)
     private Channel channel;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

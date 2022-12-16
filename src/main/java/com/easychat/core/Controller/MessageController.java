@@ -17,7 +17,7 @@ public class MessageController {
     private IMessageService service;
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Message> createMessage(Message message){
+    public ResponseEntity<Message> createMessage(@RequestBody Message message){
         return ResponseEntity.ok(service.createMessage(message));
     }
 
@@ -36,7 +36,7 @@ public class MessageController {
     }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Message> updateMessage(Message message){
+    public ResponseEntity<Message> updateMessage(@RequestBody Message message){
         try {
             return ResponseEntity.ok(service.updateMessage(message));
         } catch (Exception e) {
