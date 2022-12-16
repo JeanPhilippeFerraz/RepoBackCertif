@@ -24,8 +24,7 @@ public class ChannelController {
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Channel> getChannelById(@PathVariable Integer id) {
         try{
-            ResponseEntity.ok(service.getChannelById(id));
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(service.getChannelById(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -37,10 +36,10 @@ public class ChannelController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteChannel(@RequestBody Channel channel) {
+    public ResponseEntity<Channel> deleteChannel(@RequestBody Channel channel) {
         try {
             service.deleteChannel(channel);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(channel);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -50,8 +49,7 @@ public class ChannelController {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Channel> updateChannel(@RequestBody Channel channel) {
         try {
-            service.updateChannel(channel);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(service.updateChannel(channel));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
