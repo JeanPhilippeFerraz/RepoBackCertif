@@ -5,8 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -30,7 +29,7 @@ public class Channel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
 
-    @OneToMany(mappedBy="message")
+    @OneToMany(mappedBy="channel")
     private Set<Message> messages;
 
     @ManyToMany(mappedBy="channels")
