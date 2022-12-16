@@ -4,9 +4,13 @@ import com.easychat.core.entity.Channel;
 import com.easychat.core.repository.ChannelRepository;
 import com.easychat.core.service.IChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class ChannelServiceImpl implements IChannelService {
 
     @Autowired

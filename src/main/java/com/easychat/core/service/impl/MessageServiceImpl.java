@@ -3,11 +3,17 @@ package com.easychat.core.service.impl;
 import com.easychat.core.entity.Message;
 import com.easychat.core.repository.MessageRepository;
 import com.easychat.core.service.IMessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class MessageServiceImpl implements IMessageService {
 
+    @Autowired
     MessageRepository repository;
 
     @Override

@@ -2,6 +2,7 @@ package com.easychat.core.Controller;
 
 import com.easychat.core.entity.User;
 import com.easychat.core.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequestMapping("/easychat/user")
 public class UserController {
 
+    @Autowired
     private IUserService service;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
