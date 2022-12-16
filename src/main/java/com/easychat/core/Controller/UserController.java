@@ -24,8 +24,7 @@ public class UserController {
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         try{
-            ResponseEntity.ok(service.getUserById(id));
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(service.getUserById(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -50,8 +49,7 @@ public class UserController {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         try {
-            service.updateUser(user);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(service.updateUser(user));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
