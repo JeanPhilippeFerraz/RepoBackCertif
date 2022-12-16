@@ -20,7 +20,7 @@ public class User {
     @Column(length=50)
     private String password;
 
-    @OneToMany(mappedBy="message")
+    @OneToMany(mappedBy="user")
     private Set<Message> messages;
 
     @ManyToMany
