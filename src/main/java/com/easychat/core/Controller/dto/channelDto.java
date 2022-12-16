@@ -2,21 +2,21 @@ package com.easychat.core.Controller.dto;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Data
-public class channelDto {
+public class ChannelDto {
 
     private Integer id;
     private String name;
     private String description;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private Date created_at;
+    private Date updated_at;
 
-    public channelDto() {
+    public ChannelDto() {
     }
 
-    public channelDto(Integer id, String name, String description, Timestamp created_at, Timestamp updated_at) {
+    public ChannelDto(Integer id, String name, String description, Date created_at, Date updated_at) {
         this.id = id;
         this.name = name;
         this.description = description;

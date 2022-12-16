@@ -20,7 +20,10 @@ public class User {
     @Column(length=50)
     private String password;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="channel")
+    private Set<Message> messages;
+
+    @OneToMany(mappedBy="channel")
     private Set<UserChannel> userChannels;
 
     public User() {

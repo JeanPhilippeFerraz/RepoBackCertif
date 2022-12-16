@@ -1,7 +1,7 @@
 package com.easychat.core.Controller;
 
-import com.easychat.core.entity.User;
-import com.easychat.core.service.IUserService;
+import com.easychat.core.entity.Channel;
+import com.easychat.core.service.IChannelService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/easychat/user")
-public class UserController {
+@RequestMapping("/easychat/channel")
+public class ChannelController {
 
-    private IUserService service;
+    private IChannelService service;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(service.getAllUsers());
+    public ResponseEntity<List<Channel>> getAllChannels() {
+        return ResponseEntity.ok(service.getAllChannels());
     }
 
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<Channel> getChannelById(@PathVariable Integer id) {
         try{
-            ResponseEntity.ok(service.getUserById(id));
+            ResponseEntity.ok(service.getChannelById(id));
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -30,14 +30,14 @@ public class UserController {
     }
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(service.createUser(user));
+    public ResponseEntity<Channel> createChannel(@RequestBody Channel channel) {
+        return ResponseEntity.ok(service.createChannel(channel));
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser(@RequestBody User user) {
+    public ResponseEntity<Void> deleteChannel(@RequestBody Channel channel) {
         try {
-            service.deleteUser(user);
+            service.deleteChannel(channel);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -46,15 +46,12 @@ public class UserController {
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
             MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<Channel> updateChannel(@RequestBody Channel channel) {
         try {
-            service.updateUser(user);
+            service.updateChannel(channel);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
 }
