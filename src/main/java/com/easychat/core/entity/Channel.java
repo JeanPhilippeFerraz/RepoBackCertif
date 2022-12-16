@@ -25,6 +25,9 @@ public class Channel {
     @OneToMany(mappedBy="channel")
     private Set<Message> messages;
 
+    @OneToMany(mappedBy="channel")
+    private Set<UserChannel> userChannels;
+
     public Channel() {
     }
 

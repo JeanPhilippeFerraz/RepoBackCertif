@@ -29,10 +29,10 @@ public class MessageServiceImpl implements IMessageService {
     public Message updateMessage(Message message) throws Exception {
 
         Message messageToUpdate = repository.findById(message.getId()).orElseThrow(Exception::new);
-
         messageToUpdate.setText(message.getText());
-        messageToUpdate.setChannel(message.getChannel());
-        messageToUpdate.setUpdated_at(message.getUpdated_at());
+
+        return repository.save(message);
+
     }
 
     @Override
