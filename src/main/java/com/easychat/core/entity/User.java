@@ -20,11 +20,15 @@ public class User {
     @Column(length=50)
     private String password;
 
-    @OneToMany(mappedBy="channel")
+    @OneToMany(mappedBy="message")
     private Set<Message> messages;
 
-    @OneToMany(mappedBy="channel")
-    private Set<UserChannel> userChannels;
+    @ManyToMany
+    @JoinTable(
+            name = "channels",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private Set<Channel> channels;
 
     public User() {
     }
