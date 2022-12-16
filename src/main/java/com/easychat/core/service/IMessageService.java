@@ -1,9 +1,11 @@
 package com.easychat.core.service;
 
 import com.easychat.core.entity.Message;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface IMessageService {
 
     public Message createMessage(Message message);
