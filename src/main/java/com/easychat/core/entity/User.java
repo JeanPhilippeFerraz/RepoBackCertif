@@ -25,7 +25,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "channels",
+            name = "channel_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
