@@ -1,5 +1,6 @@
 package com.easychat.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy="user")
+    @JsonIgnore
     private Set<Message> messages;
 
     @ManyToMany

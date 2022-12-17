@@ -1,5 +1,6 @@
 package com.easychat.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,9 +20,11 @@ public class Message {
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="channel_id", nullable = false)
+    @JsonIgnore
     private Channel channel;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
+    @JsonIgnore
     private User user;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
