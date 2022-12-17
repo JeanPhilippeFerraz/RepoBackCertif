@@ -1,5 +1,6 @@
 package com.easychat.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -30,6 +31,7 @@ public class Channel {
     private Date updated_at;
 
     @OneToMany(mappedBy="channel")
+    @JsonIgnore
     private Set<Message> messages;
 
     @ManyToMany(mappedBy="channels")
