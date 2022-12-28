@@ -28,11 +28,13 @@ public class Message {
     private User user;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    @Column(name = "created_at")
+    private Date createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updated_at;
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     public Message() {
     }
@@ -43,20 +45,20 @@ public class Message {
         this.user = user;
     }
 
-    public Message(String text, Channel channel, User user, Date created_at, Date updated_at) {
-        this.text = text;
-        this.channel = channel;
-        this.user = user;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-    }
-
-    public Message(Integer id, String text, Channel channel, User user, Date created_at, Date updated_at) {
+    public Message(Integer id, String text, Channel channel, User user, Date createdAt, Date updatedAt) {
         this.id = id;
         this.text = text;
         this.channel = channel;
         this.user = user;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Message(String text, Channel channel, User user, Date createdAt, Date updatedAt) {
+        this.text = text;
+        this.channel = channel;
+        this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

@@ -1,44 +1,80 @@
 package com.easychat.core.Controller;
 
+import com.easychat.core.Controller.dto.MessageDto;
+import com.easychat.core.entity.Channel;
 import com.easychat.core.entity.Message;
+import com.easychat.core.entity.User;
+import com.easychat.core.mapper.MessageMapper;
+import com.easychat.core.service.IChannelService;
 import com.easychat.core.service.IMessageService;
+import com.easychat.core.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/easychat/message")
 public class MessageController {
 
     @Autowired
-    private IMessageService service;
+    private IMessageService messageService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IChannelService channelService;
+
+    @Autowired
+    MessageMapper mapper;
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Message> createMessage(@RequestBody Message message){
-        return ResponseEntity.ok(service.createMessage(message));
+    public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto){
+
+        try {
+            User user = userService.getUserById(messageDto.getUserId());;
+            Channel channel = channelService.getChannelById(messageDto.getChannelId());
+            Message message = mapper.mapMessageDtoToMessage(messageDto, user, channel);
+            return ResponseEntity.ok(mapper.mapMessageToMessageDto(messageService.createMessage(message)));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<Message>> getAllMessages(){
-        return ResponseEntity.ok(service.getAllMessage());
+    public ResponseEntity<List<MessageDto>> getAllMessages(){
+
+        return ResponseEntity.ok(messageService.getAllMessage().stream()
+                .map(mapper::mapMessageToMessageDto)
+                .collect(Collectors.toList())
+        );
     }
 
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Message> getMessageById(@PathVariable Integer id) {
+    public ResponseEntity<MessageDto> getMessageById(@PathVariable Integer id) {
         try {
-            return ResponseEntity.ok(service.getMessageById(id));
+            Message message = messageService.getMessageById(id);
+            MessageDto messageDto = mapper.mapMessageToMessageDto(message);
+            return ResponseEntity.ok(messageDto);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Message> updateMessage(@RequestBody Message message){
+    public ResponseEntity<MessageDto> updateMessage(@RequestBody MessageDto messageDto){
         try {
-            return ResponseEntity.ok(service.updateMessage(message));
+            Message message = mapper.mapMessageDtoToMessage(messageDto, null, null);
+            Message originalMessage = messageService.getMessageById(message.getId());
+            message.setUser(originalMessage.getUser());
+            message.setChannel(originalMessage.getChannel());
+            message.setCreatedAt(originalMessage.getCreatedAt());
+            message = messageService.updateMessage(message);
+            return ResponseEntity.ok(mapper.mapMessageToMessageDto(message));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -47,7 +83,7 @@ public class MessageController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable int id){
         try {
-            service.deleteMessage(service.getMessageById(id));
+            messageService.deleteMessage(messageService.getMessageById(id));
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
