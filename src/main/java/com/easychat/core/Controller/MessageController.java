@@ -36,7 +36,7 @@ public class MessageController {
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto){
 
         try {
-            User user = userService.getUserById(messageDto.getUserId());;
+            User user = userService.getUserById(messageDto.getUserId());
             Channel channel = channelService.getChannelById(messageDto.getChannelId());
             Message message = mapper.mapMessageDtoToMessage(messageDto, user, channel);
             return ResponseEntity.ok(mapper.mapMessageToMessageDto(messageService.createMessage(message)));
@@ -79,21 +79,31 @@ public class MessageController {
         try {
             Message message = mapper.mapMessageDtoToMessage(messageDto, null, null);
             Message originalMessage = messageService.getMessageById(message.getId());
-            message.setUser(originalMessage.getUser());
-            message.setChannel(originalMessage.getChannel());
-            message.setCreatedAt(originalMessage.getCreatedAt());
-            message = messageService.updateMessage(message);
-            return ResponseEntity.ok(mapper.mapMessageToMessageDto(message));
+            if (messageDto.getUserId() == originalMessage.getUser().getId()){
+                message.setUser(originalMessage.getUser());
+                message.setChannel(originalMessage.getChannel());
+                message.setCreatedAt(originalMessage.getCreatedAt());
+                message = messageService.updateMessage(message);
+                return ResponseEntity.ok(mapper.mapMessageToMessageDto(message));
+            } else {
+                return ResponseEntity.unprocessableEntity().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable int id){
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMessage(@RequestBody MessageDto messageDto){
         try {
-            messageService.deleteMessage(messageService.getMessageById(id));
-            return ResponseEntity.noContent().build();
+            Message message = mapper.mapMessageDtoToMessage(messageDto, null, null);
+            Message originalMessage = messageService.getMessageById(message.getId());
+            if (messageDto.getUserId() == originalMessage.getUser().getId()){
+                messageService.deleteMessage(message);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.unprocessableEntity().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
