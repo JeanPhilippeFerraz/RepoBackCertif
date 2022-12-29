@@ -2,8 +2,10 @@ package com.easychat.core.Controller;
 
 import com.easychat.core.Controller.dto.ChannelDto;
 import com.easychat.core.entity.Channel;
+import com.easychat.core.entity.User;
 import com.easychat.core.mapper.ChannelMapper;
 import com.easychat.core.service.IChannelService;
+import com.easychat.core.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import java.util.stream.Collectors;
 public class ChannelController {
 
     @Autowired
-    private IChannelService service;
+    private IChannelService channelService;
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     protected ChannelMapper mapper;
@@ -25,7 +30,7 @@ public class ChannelController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<ChannelDto>> getAllChannels() {
 
-        return ResponseEntity.ok( service.getAllChannels().stream()
+        return ResponseEntity.ok( channelService.getAllChannels().stream()
                                   .map(mapper::mapChannelToChannelDto)
                                   .collect(Collectors.toList()));
     }
@@ -33,7 +38,7 @@ public class ChannelController {
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ChannelDto> getChannelById(@PathVariable Integer id) {
         try{
-            ChannelDto channelDto = mapper.mapChannelToChannelDto(service.getChannelById(id));
+            ChannelDto channelDto = mapper.mapChannelToChannelDto(channelService.getChannelById(id));
             return ResponseEntity.ok(channelDto);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -42,34 +47,50 @@ public class ChannelController {
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ChannelDto> createChannel(@RequestBody ChannelDto channelDto) {
-        Channel createdChannel = service.createChannel(mapper.mapChannelDtoToChannel(channelDto));
-        return ResponseEntity.ok(mapper.mapChannelToChannelDto(createdChannel));
+
+        try{
+            User owner = userService.getUserById(channelDto.getOwnerId());
+            Channel createdChannel = channelService.createChannel(mapper.mapChannelDtoToChannel(channelDto, owner));
+            return ResponseEntity.ok(mapper.mapChannelToChannelDto(createdChannel));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteChannel(@RequestBody ChannelDto channelDto) {
+        try {
+            Channel channelToDelete = channelService.getChannelById(channelDto.getId());
 
-        Channel channel = mapper.mapChannelDtoToChannel(channelDto);
-        if (channel.getId()!=1){
-            try {
-                service.deleteChannel(channel);
-                return ResponseEntity.noContent().build();
-            } catch (Exception e) {
+            if (channelDto.getOwnerId() == channelToDelete.getOwner().getId()) {
+                Channel channel = mapper.mapChannelDtoToChannel(channelDto, null);
+                if (channel.getId() != 1) {
+                    channelService.deleteChannel(channel);
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.unprocessableEntity().build();
+                }
+            }else{
+                return ResponseEntity.unprocessableEntity().build();
+            }
+        } catch (Exception e) {
                 return ResponseEntity.notFound().build();
             }
-        } else {
-            return ResponseEntity.unprocessableEntity().build();
-        }
     }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ChannelDto> updateChannel(@RequestBody ChannelDto channelDto) {
         try {
-            Channel channelUpdated = mapper.mapChannelDtoToChannel(channelDto);
-            Channel channelToUpdate = service.getChannelById(channelUpdated.getId());
-            channelUpdated.setCreated_at(channelToUpdate.getCreated_at());
-            return ResponseEntity.ok(mapper.mapChannelToChannelDto(service.updateChannel(channelUpdated)));
+
+            Channel channelToUpdate = channelService.getChannelById(channelDto.getId());
+            if(channelToUpdate.getOwner().getId() == channelDto.getOwnerId()) {
+                Channel channelUpdated = mapper.mapChannelDtoToChannel(channelDto, channelToUpdate.getOwner());
+                channelUpdated.setCreated_at(channelToUpdate.getCreated_at());
+                return ResponseEntity.ok(mapper.mapChannelToChannelDto(channelService.updateChannel(channelUpdated)));
+            }else{
+                return ResponseEntity.unprocessableEntity().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
