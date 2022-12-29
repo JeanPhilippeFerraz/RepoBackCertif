@@ -21,6 +21,11 @@ public class User {
     @Column(length=50, nullable = false)
     private String password;
 
+    @OneToMany(mappedBy="owner")
+    @JsonIgnore
+    private Set<Channel> channelsOwned;
+
+
     @OneToMany(mappedBy="user")
     @JsonIgnore
     private Set<Message> messages;

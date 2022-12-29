@@ -22,6 +22,12 @@ public class Channel {
     private String name;
     @Column(length=250)
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_id", nullable = false)
+    @JsonIgnore
+    private User owner;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
