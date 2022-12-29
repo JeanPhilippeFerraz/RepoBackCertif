@@ -54,7 +54,16 @@ public class MessageController {
         );
     }
 
-    @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value="/{channelId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<MessageDto>> getAllMessages(@PathVariable Integer channelId){
+
+        return ResponseEntity.ok(messageService.getMessagesByChannel(channelId).stream()
+                .map(mapper::mapMessageToMessageDto)
+                .collect(Collectors.toList())
+        );
+    }
+
+    /*@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Integer id) {
         try {
             Message message = messageService.getMessageById(id);
@@ -63,7 +72,7 @@ public class MessageController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-    }
+    }*/
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MessageDto> updateMessage(@RequestBody MessageDto messageDto){

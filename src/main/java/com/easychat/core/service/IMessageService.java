@@ -10,6 +10,8 @@ public interface IMessageService {
 
     public List<Message> getAllMessage();
 
+    public List<Message> getMessagesByChannel(Integer channelId);
+
     public Message getMessageById(Integer id) throws Exception;
 
     public Message updateMessage(Message message) throws Exception;

@@ -27,6 +27,11 @@ public class MessageServiceImpl implements IMessageService {
     }
 
     @Override
+    public List<Message> getMessagesByChannel(Integer channelId) {
+        return repository.findAllByChannelId(channelId);
+    }
+
+    @Override
     public Message getMessageById(Integer id) throws Exception {
         return repository.findById(id).orElseThrow(Exception::new);
     }
