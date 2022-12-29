@@ -7,6 +7,7 @@ import com.easychat.core.mapper.ChannelMapper;
 import com.easychat.core.service.IChannelService;
 import com.easychat.core.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ public class ChannelController {
 
     @Autowired
     private IChannelService channelService;
+
+    @Value("${generalChannelId}")
+    private Integer generalChannelId;
 
     @Autowired
     private IUserService userService;
@@ -64,9 +68,9 @@ public class ChannelController {
 
             if (channelDto.getOwnerId() == channelToDelete.getOwner().getId()) {
                 Channel channel = mapper.mapChannelDtoToChannel(channelDto, null);
-                if (channel.getId() != 1) {
+                if (channel.getId() != generalChannelId) {
                     channelService.deleteChannel(channel);
-                    return ResponseEntity.noContent().build();
+                    return ResponseEntity.ok().build();
                 } else {
                     return ResponseEntity.unprocessableEntity().build();
                 }
@@ -82,9 +86,8 @@ public class ChannelController {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ChannelDto> updateChannel(@RequestBody ChannelDto channelDto) {
         try {
-
             Channel channelToUpdate = channelService.getChannelById(channelDto.getId());
-            if(channelToUpdate.getOwner().getId() == channelDto.getOwnerId()) {
+            if(channelToUpdate.getOwner().getId() == channelDto.getOwnerId() && channelToUpdate.getId() != generalChannelId) {
                 Channel channelUpdated = mapper.mapChannelDtoToChannel(channelDto, channelToUpdate.getOwner());
                 channelUpdated.setCreated_at(channelToUpdate.getCreated_at());
                 return ResponseEntity.ok(mapper.mapChannelToChannelDto(channelService.updateChannel(channelUpdated)));

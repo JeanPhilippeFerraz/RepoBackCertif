@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@RequestBody UserDto userDto) {
         try {
             service.deleteUser(mapper.mapUserDtoToUser(userDto));
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
