@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/easychat/user")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired

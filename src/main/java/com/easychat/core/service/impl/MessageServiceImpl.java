@@ -40,10 +40,8 @@ public class MessageServiceImpl implements IMessageService {
     public Message updateMessage(Message message) throws Exception {
 
         Message messageToUpdate = repository.findById(message.getId()).orElseThrow(Exception::new);
-        messageToUpdate.setText(message.getText());
 
         return repository.save(message);
-
     }
 
     @Override
