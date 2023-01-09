@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/easychat/message")
+@CrossOrigin(origins = "http://localhost:4200")
 public class MessageController {
 
     @Autowired
