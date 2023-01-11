@@ -62,26 +62,36 @@ public class ChannelController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteChannel(@RequestBody ChannelDto channelDto) {
+    @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Void> deleteChannel(@PathVariable Integer id) {
         try {
-            Channel channelToDelete = channelService.getChannelById(channelDto.getId());
-
-            if (channelDto.getOwnerId() == channelToDelete.getOwner().getId()) {
-                Channel channel = mapper.mapChannelDtoToChannel(channelDto, null);
-                if (channel.getId() != generalChannelId) {
-                    channelService.deleteChannel(channel);
-                    return ResponseEntity.ok().build();
-                } else {
-                    return ResponseEntity.unprocessableEntity().build();
-                }
-            }else{
-                return ResponseEntity.unprocessableEntity().build();
-            }
+            channelService.deleteChannel(channelService.getChannelById(id));
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
                 return ResponseEntity.notFound().build();
             }
     }
+
+    // @DeleteMapping
+    // public ResponseEntity<Void> deleteChannel(@RequestBody ChannelDto channelDto) {
+    //     try {
+    //         Channel channelToDelete = channelService.getChannelById(channelDto.getId());
+
+    //         if (channelDto.getOwnerId() == channelToDelete.getOwner().getId()) {
+    //             Channel channel = mapper.mapChannelDtoToChannel(channelDto, null);
+    //             if (channel.getId() != generalChannelId) {
+    //                 channelService.deleteChannel(channel);
+    //                 return ResponseEntity.ok().build();
+    //             } else {
+    //                 return ResponseEntity.unprocessableEntity().build();
+    //             }
+    //         }else{
+    //             return ResponseEntity.unprocessableEntity().build();
+    //         }
+    //     } catch (Exception e) {
+    //             return ResponseEntity.notFound().build();
+    //         }
+    // }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
             MediaType.APPLICATION_JSON_VALUE })

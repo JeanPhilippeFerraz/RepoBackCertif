@@ -34,13 +34,13 @@ public class ChannelServiceImpl implements IChannelService {
 
     @Override
     public Channel updateChannel(Channel channel) throws Exception {
-        Channel channelToUpdate = repo.findById(channel.getId()).orElseThrow(Exception::new);
+        //Channel channelToUpdate = repo.findById(channel.getId()).orElseThrow(Exception::new);
         return repo.save(channel);
     }
 
     @Override
     public void deleteChannel(Channel channel) throws Exception {
-        repo.findById(channel.getId()).orElseThrow(Exception::new);
+        //repo.findById(channel.getId()).orElseThrow(Exception::new);
         repo.delete(channel);
     }
 }
