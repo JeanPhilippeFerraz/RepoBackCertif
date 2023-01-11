@@ -64,7 +64,7 @@ public class MessageController {
         );
     }
 
-    /*@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "messageId/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Integer id) {
         try {
             Message message = messageService.getMessageById(id);
@@ -73,7 +73,7 @@ public class MessageController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-    }*/
+    }
 
     @PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MessageDto> updateMessage(@RequestBody MessageDto messageDto){
