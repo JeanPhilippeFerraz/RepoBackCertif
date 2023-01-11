@@ -64,7 +64,7 @@ public class MessageController {
         );
     }
 
-    @GetMapping(value = "messageId/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/messageId/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Integer id) {
         try {
             Message message = messageService.getMessageById(id);
@@ -94,19 +94,29 @@ public class MessageController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteMessage(@RequestBody MessageDto messageDto){
+    @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Void> deleteMessage(@PathVariable Integer id){
         try {
-            Message message = mapper.mapMessageDtoToMessage(messageDto, null, null);
-            Message originalMessage = messageService.getMessageById(message.getId());
-            if (messageDto.getUserId() == originalMessage.getUser().getId()){
-                messageService.deleteMessage(message);
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.unprocessableEntity().build();
-            }
+            messageService.deleteMessage(messageService.getMessageById(id));
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // @DeleteMapping
+    // public ResponseEntity<Void> deleteMessage(@RequestBody MessageDto messageDto){
+    //     try {
+    //         Message message = mapper.mapMessageDtoToMessage(messageDto, null, null);
+    //         Message originalMessage = messageService.getMessageById(id);
+    //         if (messageDto.getUserId() == originalMessage.getUser().getId()){
+    //             messageService.deleteMessage(message);
+    //             return ResponseEntity.ok().build();
+    //         } else {
+    //             return ResponseEntity.unprocessableEntity().build();
+    //         }
+    //     } catch (Exception e) {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 }

@@ -38,15 +38,13 @@ public class MessageServiceImpl implements IMessageService {
 
     @Override
     public Message updateMessage(Message message) throws Exception {
-
-        Message messageToUpdate = repository.findById(message.getId()).orElseThrow(Exception::new);
-
+        //Message messageToUpdate = repository.findById(message.getId()).orElseThrow(Exception::new);
         return repository.save(message);
     }
 
     @Override
     public void deleteMessage(Message message) throws Exception {
-        Message messageToDelete = repository.findById(message.getId()).orElseThrow(Exception::new);
-        repository.delete(messageToDelete);
+        //Message messageToDelete = repository.findById(message.getId()).orElseThrow(Exception::new);
+        repository.delete(message);
     }
 }
